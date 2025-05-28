@@ -1,5 +1,4 @@
-﻿// Data/ApplicationDbContext.cs
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using IaPioniers.Models; 
@@ -18,13 +17,13 @@ namespace IaPioniers.Data
         public DbSet<Turma> Turmas { get; set; }
         public DbSet<Professor> Professores { get; set; }
         public DbSet<Coordenador> Coordenadores { get; set; }
-        // REMOVA: public DbSet<TurmaProfessor> TurmaProfessores { get; set; } // Não é mais necessário como DbSet explícito
+      
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
 
-            // Renomear tabelas do Identity (opcional)
+         
             builder.Entity<ApplicationUser>().ToTable("Users");
             builder.Entity<IdentityRole>().ToTable("Roles");
             builder.Entity<IdentityUserRole<string>>().ToTable("UserRoles");
@@ -33,16 +32,12 @@ namespace IaPioniers.Data
             builder.Entity<IdentityRoleClaim<string>>().ToTable("RoleClaims");
             builder.Entity<IdentityUserToken<string>>().ToTable("UserTokens");
 
-            // Configuração Many-to-Many entre Turma e Professor (se EF Core >= 5.0)
-            // O EF Core irá automaticamente criar a tabela de junção "TurmaProfessor"
-            // com as chaves estrangeiras TurmaId e ProfessorId.
-            builder.Entity<Professor>()
-                .HasMany(p => p.Turmas)       // Um Professor tem muitas Turmas
-                .WithMany(t => t.Professores) // Uma Turma tem muitos Professores
-                // .UsingEntity(j => j.ToTable("TurmaProfessor")); // Opcional: especificar o nome da tabela de junção e configurar chaves adicionais, se necessário.
-                // Se você não usar UsingEntity, o EF Core criará um nome padrão (ex: ProfessorTurma).
-                // Se quiser manter o nome "TurmaProfessor", descomente esta linha.
 
+            builder.Entity<Professor>()
+                .HasMany(p => p.Turmas)      
+                .WithMany(t => t.Professores) 
+                .UsingEntity(j => j.ToTable("TurmaProfessor"));
+               
             // Configuração One-to-One para ApplicationUser e Professor
             builder.Entity<ApplicationUser>()
                 .HasOne(au => au.Professor)

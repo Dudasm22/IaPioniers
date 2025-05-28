@@ -5,7 +5,7 @@ namespace IaPioniers.Models
 {
     public class Turma
     {
-        public int IdTurma { get; set; } 
+        public int TurmaId { get; set; } 
 
         public string Codigo { get; set; } 
         public int AnoLetivo { get; set; } 
@@ -15,6 +15,6 @@ namespace IaPioniers.Models
         public Curso Curso { get; set; }
 
        
-        public ICollection<Professor> TurmaProfessores { get; set; } = new List<Professor>();
+        public ICollection<Professor> Professores { get; set; } = new List<Professor>();
     }
 }
